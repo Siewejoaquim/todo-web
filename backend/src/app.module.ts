@@ -12,7 +12,7 @@ import { UsersModule } from './users/users.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    MongooseModule.forRoot(process.env.MONGODB_URI ),
+    MongooseModule.forRoot(process.env.MONGODB_URI ??"mongodb://localhost:27017/todo-web"),
     AuthModule,
     UsersModule,
   ],
