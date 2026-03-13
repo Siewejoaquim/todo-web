@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
@@ -19,13 +19,13 @@ export class AuthService {
   const user = await this.userModel.findOne({ email });
 
   if (!user) {
-    throw new UnauthorizedException('Invalid credentials');
+    throw new BadRequestException('Invalid credentials');
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    throw new UnauthorizedException('Invalid credentials');
+    throw new BadRequestException('Invalid credentials');
   }
 
   const payload = {

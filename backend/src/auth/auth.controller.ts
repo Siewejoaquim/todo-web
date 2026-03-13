@@ -16,8 +16,5 @@ export class AuthController {
 register(@Body() body) {
   return this.authService.register(body);
 }
-@Get()
-  getUsers() {
-    return this.usersService.findAll();
-  }
+
 }
