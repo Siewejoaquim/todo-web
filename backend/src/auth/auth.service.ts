@@ -46,6 +46,12 @@ export class AuthService {
  async register(data) {
   try {
 
+    const existingUser = await this.userModel.findOne({ email: data.email });
+
+    if (existingUser) {
+      throw new Error('Email already registered');
+    }
+
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
     const user = new this.userModel({
@@ -55,12 +61,6 @@ export class AuthService {
     });
 
     const savedUser = await user.save();
-
-    try {
-      await this.mailService.sendWelcomeEmail(savedUser.email);
-    } catch (mailError) {
-      console.log("Email failed:", mailError);
-    }
 
     return savedUser;
 
