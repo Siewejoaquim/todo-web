@@ -43,25 +43,30 @@ export class AuthService {
     } 
   };}
 
-  async register(data) {
-    try{
+ async register(data) {
+  try {
 
-      const hashedPassword = await bcrypt.hash(data.password, 10);
-    
-      const user = new this.userModel({
-        name: data.name,
-        email: data.email,
-        password: hashedPassword,
-      });
-    
-      const savedUser = await user.save();
-    
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    const user = new this.userModel({
+      name: data.name,
+      email: data.email,
+      password: hashedPassword,
+    });
+
+    const savedUser = await user.save();
+
+    try {
       await this.mailService.sendWelcomeEmail(savedUser.email);
-    
-      return savedUser;
-    }catch(error){
-      throw new Error('Registration failed');
-      console.error('Error during registration:', error);
+    } catch (mailError) {
+      console.log("Email failed:", mailError);
     }
+
+    return savedUser;
+
+  } catch (error) {
+    console.log("REGISTER ERROR:", error);
+    throw new Error("Registration failed");
+  }
 }
 }

@@ -20,4 +20,3 @@ export class MailService {
   }
 }
 
-//makb lnyx ppzn lgkh
