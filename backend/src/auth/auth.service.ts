@@ -35,22 +35,33 @@ export class AuthService {
 
   return {
     access_token: this.jwtService.sign(payload),
-  };
-}
+    user: {
+      id: user._id,
+      name: user.name, 
+      email: user.email,
+
+    } 
+  };}
 
   async register(data) {
-  const hashedPassword = await bcrypt.hash(data.password, 10);
+    try{
 
-  const user = new this.userModel({
-    name: data.name,
-    email: data.email,
-    password: hashedPassword,
-  });
-
-  const savedUser = await user.save();
-
-  await this.mailService.sendWelcomeEmail(savedUser.email);
-
-  return savedUser;
+      const hashedPassword = await bcrypt.hash(data.password, 10);
+    
+      const user = new this.userModel({
+        name: data.name,
+        email: data.email,
+        password: hashedPassword,
+      });
+    
+      const savedUser = await user.save();
+    
+      await this.mailService.sendWelcomeEmail(savedUser.email);
+    
+      return savedUser;
+    }catch(error){
+      throw new Error('Registration failed');
+      console.error('Error during registration:', error);
+    }
 }
 }
