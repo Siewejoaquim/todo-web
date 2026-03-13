@@ -4,9 +4,12 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from '../users/users.module';
 import { MailService } from '../mail/mail.service';
+import { JwtStrategy } from './jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
+    PassportModule,
     JwtModule.register({
       secret: 'secretKey',
       signOptions: { expiresIn: '1h' },
@@ -14,6 +17,7 @@ import { MailService } from '../mail/mail.service';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, MailService], 
+  providers: [AuthService, MailService,JwtStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}
