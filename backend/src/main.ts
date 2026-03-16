@@ -9,7 +9,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Todo-web')
-    .setDescription('API documentation for Todo-wen')
+    .setDescription('API documentation for Todo-web')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

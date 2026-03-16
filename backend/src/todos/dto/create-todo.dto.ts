@@ -1,12 +1,16 @@
-import { IsString, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTodoDto {
 
-  @IsString()
+  @ApiProperty({
+    example: "HELLO IS JOAQUIM",
+    description: "WHAT'S UP?"
+  })
   title: string;
 
-  @IsOptional()
-  @IsString()
-  description?: string;
-
+  @ApiProperty({
+    example: "hELLO IS JOAQUIM",
+    description: "WHAT'S UP?"
+  })
+  description: string;
 }
