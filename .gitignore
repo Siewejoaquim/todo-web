@@ -7,18 +7,63 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Build output
 dist
 dist-ssr
-*.local
+build
+coverage
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# TypeScript
+*.tsbuildinfo
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Cache
+.cache
+.parcel-cache
+.npm
+.eslintcache
+.stylelintcache
+
+# Editor folders
+.vscode/
+.idea/
+
+# OS files
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+
+# Vite files
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Next / Nuxt / other frameworks (safe to ignore if unused)
+.next
+.nuxt
+out
+.svelte-kit/
+.serverless/
+
+# Firebase
+.firebase/
+
+# Yarn
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
