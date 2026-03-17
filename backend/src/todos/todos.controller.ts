@@ -3,6 +3,7 @@ import { ApiBody, ApiTags, ApiResponse, ApiBearerAuth, ApiOperation } from '@nes
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { TodoResponseDto } from './dto/TodoResponseDto';
 
 @ApiTags('Todos')
 @ApiBearerAuth()
@@ -36,6 +37,7 @@ export class TodosController {
   @ApiResponse({
     status: 200,
     description: 'List of todos',
+    type: [TodoResponseDto],
     schema: {
       example: [
         {

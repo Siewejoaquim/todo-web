@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
@@ -44,12 +44,10 @@ export class AuthService {
   };}
 
  async register(data) {
-  try {
-
     const existingUser = await this.userModel.findOne({ email: data.email });
 
     if (existingUser) {
-      throw new Error('Email already registered');
+      throw new ConflictException('Email already registered');
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -60,13 +58,7 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const savedUser = await user.save();
-
-    return savedUser;
-
-  } catch (error) {
-    console.log("REGISTER ERROR:", error);
-    throw new Error("Registration failed");
+    await this.mailService.sendWelcomeEmail(user.email);
+    return user.save();
   }
-}
 }

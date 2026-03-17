@@ -44,6 +44,7 @@ export class AuthController {
     }
   })
   register(@Body() body: RegisterDto) {
+    console.log(process.env.EMAIL_USER)
     return this.authService.register(body);
   }
 

@@ -6,7 +6,6 @@ export class MailService {
   async sendWelcomeEmail(email: string) {
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
-      port: 465,
       secure: true,
       auth: {
         user: process.env.EMAIL_USER,
@@ -14,6 +13,9 @@ export class MailService {
       },
     });
 
+console.log(process.env.EMAIL_USER
+
+)
     try {
       await transporter.sendMail({
         from: `"Todo App" <${process.env.EMAIL_USER}>`,
@@ -32,7 +34,7 @@ export class MailService {
              style="
               display:inline-block;
               padding:12px 25px;
-              background-color:#4CAF50;
+              background-color:#F4EDE4;
               color:white;
               text-decoration:none;
               border-radius:5px;
