@@ -28,7 +28,7 @@ export class MailService {
 
           <p>You can login using your app:</p>
 
-          <a href="http://localhost:5173/login"
+          <a href="https://resplendent-capybara-5fd5ef.netlify.app/"
              style="
               display:inline-block;
               padding:12px 25px;
