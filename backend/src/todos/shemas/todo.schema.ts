@@ -12,12 +12,11 @@ export class Todo {
   @Prop()
   description: string;
 
-  @Prop({ default: false })
+  @Prop({ default: false }) 
   completed: boolean;
 
   @Prop({ required: true })
   userId: string;
-
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);

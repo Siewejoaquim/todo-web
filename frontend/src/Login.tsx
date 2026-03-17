@@ -31,7 +31,7 @@ const Login: React.FC = () => {
         localStorage.setItem("user", JSON.stringify(response.user));
 
         toast.success("Login successful!");
-        navigate("/Dash"); // Navigate to dashboard
+        navigate("/dashboard"); // Navigate to dashboard
       } else {
         toast.error(response?.message || "Login failed: No token received");
       }

@@ -11,4 +11,11 @@ export class UpdateTodoDto {
     example: "update joaquims"
   })
   description?: string;
+
+  @ApiPropertyOptional({
+    example:"completed todo"
+
+  })
+  completed?:boolean
 }
+  

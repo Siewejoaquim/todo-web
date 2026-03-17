@@ -31,25 +31,25 @@ export class TodosController {
     return this.todosService.create(createTodoDto, req.user.userId);
   }
 
-  // @Get()
-  // @ApiOperation({ summary: 'Get all todos for the logged-in user' })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'List of todos',
-  //   schema: {
-  //     example: [
-  //       {
-  //         _id: "64ab23d112",
-  //         title: "joaquim",
-  //         description: "getting there",
-  //         userId: "789123abc"
-  //       }
-  //     ]
-  //   }
-  // })
-  // findAll(@Req() req) {
-  //   return this.todosService.findAll(req.user.userId);
-  // }
+  @Get()
+  @ApiOperation({ summary: 'Get all todos for the logged-in user' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of todos',
+    schema: {
+      example: [
+        {
+          _id: '64ab23d112',
+          title: 'Sample todo',
+          description: 'Example description',
+          userId: '789123abc',
+        },
+      ],
+    },
+  })
+  findAll(@Req() req) {
+    return this.todosService.findAll(req.user.userId);
+  }
 
   @Get(':id')
   @ApiOperation({ summary: 'Get a single todo by ID' })

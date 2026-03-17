@@ -3,10 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Todo } from './shemas/todo.schema';
 import { Model } from 'mongoose';
 import { CreateTodoDto } from './dto/create-todo.dto';
+import { UpdateTodoDto } from './dto/update-todo.dto';
 
 @Injectable()
 export class TodosService {
-
   constructor(
     @InjectModel(Todo.name)
     private todoModel: Model<Todo>
@@ -15,7 +15,7 @@ export class TodosService {
   create(createTodoDto: CreateTodoDto, userId: string) {
     return this.todoModel.create({
       ...createTodoDto,
-      userId
+      userId,
     });
   }
 
@@ -27,12 +27,11 @@ export class TodosService {
     return this.todoModel.findById(id);
   }
 
-  update(id: string, data: any) {
+  update(id: string, data: UpdateTodoDto) {
     return this.todoModel.findByIdAndUpdate(id, data, { new: true });
   }
 
   delete(id: string) {
     return this.todoModel.findByIdAndDelete(id);
   }
-
 }

@@ -11,9 +11,10 @@ const Dashboard: React.FC = () => {
 
   const [todoText, setTodoText] = useState("");
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [todos, setTodos] = useState<Todo[]>([]);
 
-  // Load user from localStorage
+  // ✅ add completed locally
+  const [todos, setTodos] = useState<(Todo & { completed?: boolean })[]>([]);
+
   const [userName] = useState(() => {
     const storedUser = localStorage.getItem("user");
     if (!storedUser) return "Guest";
@@ -26,12 +27,23 @@ const Dashboard: React.FC = () => {
   });
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
+    }
     fetchTodos();
-  }, []);
+  }, [navigate]);
 
   const fetchTodos = async () => {
     const data = await getTodos();
-    setTodos(Array.isArray(data) ? data : []);
+
+    // ✅ add completed = false by default
+    const updated = Array.isArray(data)
+      ? data.map((t) => ({ ...t, completed: false }))
+      : [];
+
+    setTodos(updated);
   };
 
   const addOrUpdateTodo = async () => {
@@ -39,25 +51,33 @@ const Dashboard: React.FC = () => {
 
     if (editIndex !== null) {
       const selectedTodo = todos[editIndex];
-      await updateTodo(selectedTodo.id!, { name: todoText });
+      await updateTodo(selectedTodo.id, { name: todoText });
       setEditIndex(null);
     } else {
       await createTodo({ name: todoText });
     }
 
     setTodoText("");
-    fetchTodos(); // Refresh UI
+    fetchTodos();
   };
 
   const deleteTodoItem = async (index: number) => {
     const todoToDelete = todos[index];
-    await deleteTodo(todoToDelete.id!);
+    if (!todoToDelete.id) return;
+    await deleteTodo(todoToDelete.id);
     fetchTodos();
   };
 
   const editTodoItem = (index: number) => {
     setTodoText(todos[index].name);
     setEditIndex(index);
+  };
+
+  // ✅ toggle completed (frontend only)
+  const toggleTodo = (index: number) => {
+    const updated = [...todos];
+    updated[index].completed = !updated[index].completed;
+    setTodos(updated);
   };
 
   const logout = () => {
@@ -108,7 +128,7 @@ const Dashboard: React.FC = () => {
         <main className="flex-1 bg-[#C47623] p-10 flex flex-col">
           <div className="mb-8 text-white">
             <p className="text-sm opacity-80">Today main focus</p>
-            <h1 className="text-2xl font-bold">Design today for today</h1>
+            <h1 className="text-2xl font-bold">Today's todos</h1>
           </div>
 
           {/* INPUT */}
@@ -134,12 +154,27 @@ const Dashboard: React.FC = () => {
           <div className="space-y-4 overflow-y-auto">
             {todos.map((t, index) => (
               <div
-                key={t.id}
+                key={t.id ?? index}
                 className="flex items-center justify-between bg-white px-5 py-3 rounded-lg shadow-sm"
               >
                 <div className="flex items-center space-x-3">
-                  <span className="w-3 h-3 bg-green-500 rounded-full"></span>
-                  <span className="text-[#352323] font-medium">{t.name}</span>
+                  
+                  {/* ✅ CHECKBOX */}
+                  <input
+                    type="checkbox"
+                    checked={t.completed || false}
+                    onChange={() => toggleTodo(index)}
+                  />
+
+                  <span
+                    className={`font-medium ${
+                      t.completed
+                        ? "line-through text-gray-400"
+                        : "text-[#352323]"
+                    }`}
+                  >
+                    {t.name}
+                  </span>
                 </div>
 
                 <div className="flex items-center space-x-4">
