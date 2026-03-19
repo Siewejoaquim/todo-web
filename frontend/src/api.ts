@@ -1,82 +1,80 @@
 import { apiClient } from "./utils";
 
-// Core types aligned with backend
 export type Todo = {
   id: string;
-  name: string;
+  title: string;
+  date: string;   // "YYYY-MM-DD"
+  time: string;   // "HH:MM"
+  completed: boolean;
+  createdAt: string;
 };
 
 type RawTodo = {
   _id: string;
   title: string;
-  description?: string;
+  date: string;
+  time: string;
   completed?: boolean;
+  createdAt?: string;
 };
 
 const mapTodo = (raw: RawTodo): Todo => ({
   id: raw._id,
-  name: raw.title,
+  title: raw.title,
+
+  date: raw.date ? raw.date.slice(0, 10) : "",
+  time: raw.time ? raw.time.slice(0, 5) : "00:00",
+  completed: raw.completed === true, 
+  createdAt: raw.createdAt ?? new Date().toISOString(),
 });
 
-const authHeader = () => {
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-};
-
-// Todo APIs
-export const getTodos = async (): Promise<Todo[]> => {
+export const getTodos = async (type: "today" | "scheduled" | "completed" = "today"): Promise<Todo[]> => {
   try {
-    const res = await apiClient.get<RawTodo[]>("/todos", {
-      headers: authHeader(),
-    });
-    const data = Array.isArray(res.data) ? res.data : [];
-    return data.map(mapTodo);
+    const res = await apiClient.get<RawTodo[]>(`/todos?type=${type}`);
+    return Array.isArray(res.data) ? res.data.map(mapTodo) : [];
   } catch (error) {
     console.error("Error fetching todos:", error);
     return [];
   }
 };
 
-export const createTodo = async (todo: { name: string }): Promise<Todo | undefined> => {
+export const createTodo = async (todo: {
+  title: string;
+  date: string;
+  time: string;
+}): Promise<Todo | undefined> => {
   try {
-    const res = await apiClient.post<RawTodo>(
-      "/todos",
-      {
-        title: todo.name,
-        description: "",
-      },
-      { headers: authHeader() }
-    );
+    const res = await apiClient.post<RawTodo>("/todos", todo);
     return mapTodo(res.data);
   } catch (error) {
     console.error("Error creating todo:", error);
   }
 };
 
-export const updateTodo = async (id: string, todo: { name: string }): Promise<Todo | undefined> => {
+export const updateTodo = async (
+  id: string,
+  data: { title?: string; date?: string; time?: string; completed?: boolean }
+): Promise<Todo | undefined> => {
   try {
-    const res = await apiClient.patch<RawTodo>(
-      `/todos/${id}`,
-      {
-        title: todo.name,
-      },
-      { headers: authHeader() }
-    );
+    const res = await apiClient.patch<RawTodo>(`/todos/${id}`, data);
     return mapTodo(res.data);
   } catch (error) {
     console.error("Error updating todo:", error);
   }
 };
 
+export const completeTodo = async (id: string): Promise<void> => {
+  await apiClient.patch(`/todos/${id}`, { completed: true });
+};
+
 export const deleteTodo = async (id: string): Promise<void> => {
   try {
-    await apiClient.delete(`/todos/${id}`, { headers: authHeader() });
+    await apiClient.delete(`/todos/${id}`);
   } catch (error) {
     console.error("Error deleting todo:", error);
   }
 };
 
-// Auth APIs
 export const loginUser = async (credentials: { email: string; password: string }) => {
   try {
     const res = await apiClient.post("/auth/login", credentials);

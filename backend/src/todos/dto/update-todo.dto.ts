@@ -1,21 +1,15 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class UpdateTodoDto {
-
-  @ApiPropertyOptional({
-    example: "joaquim's todo"
-  })
+  @ApiPropertyOptional({ example: 'Buy groceries' })
   title?: string;
 
-  @ApiPropertyOptional({
-    example: "update joaquims"
-  })
-  description?: string;
+  @ApiPropertyOptional({ example: '2026-03-18' })
+  date?: string;
 
-  @ApiPropertyOptional({
-    example:"completed todo"
+  @ApiPropertyOptional({ example: '09:00' })
+  time?: string;
 
-  })
-  completed?:boolean
+  @ApiPropertyOptional({ example: true })
+  completed?: boolean;
 }
-  

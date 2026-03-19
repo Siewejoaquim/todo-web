@@ -1,18 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTodoDto {
-
-  @ApiProperty({
-    example: "HELLO IS JOAQUIM",
-    description: "WHAT'S UP?"
-  })
+  @ApiProperty({ example: 'Buy groceries' })
   title: string;
 
-  @ApiProperty({
-    example: "hELLO IS JOAQUIM",
-    description: "WHAT'S UP?"
-  })
-  description: string;
+  @ApiProperty({ example: '2026-03-18' })
+  date: string;
 
-  
+  @ApiProperty({ example: '09:00' })
+  time: string;
 }

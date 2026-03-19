@@ -64,7 +64,7 @@ const Signup: FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#352323]">
+    <div className="min-h-screen flex items-center justify-center bg-[#C47623]">
 
       <ToastContainer position="top-right" autoClose={2000} />
 
@@ -108,8 +108,8 @@ const Signup: FC = () => {
               {...register("email", {
                 required: "Email is required",
                 pattern: {
-                  value: /\S+@\S+\.\S+/,
-                  message: "Invalid email address",
+                  value: /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/,
+                  message: "Enter a valid email like name@example.com",
                 },
               })}
               className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:border-[#d28585] focus:outline-none"
@@ -164,7 +164,7 @@ const Signup: FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full cursor-pointer bg-[#C47623] text-white py-2 rounded-md font-medium hover:bg-blue-700 transition"
+            className="w-full cursor-pointer bg-[#C47623] text-white py-2 rounded-md font-medium hover:bg-black transition"
           >
             {isSubmitting ? "Submitting..." : "Create account"}
           </button>

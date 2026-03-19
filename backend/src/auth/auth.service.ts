@@ -58,7 +58,7 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    await this.mailService.sendWelcomeEmail(user.email);
+    await this.mailService.sendWelcomeEmail(user.email, user.name);
     return user.save();
   }
 }

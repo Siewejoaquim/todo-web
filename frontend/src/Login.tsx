@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { loginUser } from "./api";
+import { useAuth } from "./context/AuthContext";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,6 +14,7 @@ export interface LoginInfo {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -26,12 +28,9 @@ const Login: React.FC = () => {
       const response = await loginUser(formData);
 
       if (response?.access_token) {
-        // ✅ Store token and user info
-        localStorage.setItem("token", response.access_token);
-        localStorage.setItem("user", JSON.stringify(response.user));
-
+        login(response.access_token, response.user);
         toast.success("Login successful!");
-        navigate("/dashboard"); // Navigate to dashboard
+        navigate("/dashboard");
       } else {
         toast.error(response?.message || "Login failed: No token received");
       }
@@ -47,7 +46,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#352323] flex items-center justify-center">
+    <div className="min-h-screen bg-[#C47623] flex items-center justify-center">
       <ToastContainer position="top-right" autoClose={2000} />
 
       <div className="bg-white w-full max-w-md p-8 rounded-lg shadow-md">
@@ -114,7 +113,7 @@ const Login: React.FC = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-[#C47623] text-white py-3 rounded-md font-medium hover:bg-gray-900 transition"
+            className="w-full bg-[#C47623] text-white py-3 rounded-md font-medium hover:bg-black transition"
           >
             {isSubmitting ? "Signing In..." : "Sign In"}
           </button>
