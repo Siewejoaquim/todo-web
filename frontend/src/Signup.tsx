@@ -26,8 +26,6 @@ const Signup: FC = () => {
     reset,
   } = useForm<FormData>();
 
-  /* SUCCESS SUBMIT */
-
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
       await registerUser(data);
@@ -45,8 +43,6 @@ const Signup: FC = () => {
       toast.error("Unable to create account ❌");
     }
   };
-
-  /* FORM VALIDATION ERROR */
 
   const onError: SubmitErrorHandler<FormData> = (errors) => {
 
@@ -78,8 +74,6 @@ const Signup: FC = () => {
 
         <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
 
-          {/* NAME */}
-
           <div>
             <label className="block text-sm font-medium mb-1">Name</label>
 
@@ -97,8 +91,6 @@ const Signup: FC = () => {
             />
           </div>
 
-          {/* EMAIL */}
-
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
 
@@ -115,8 +107,6 @@ const Signup: FC = () => {
               className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm focus:border-[#d28585] focus:outline-none"
             />
           </div>
-
-          {/* PASSWORD */}
 
           <div>
             <label className="block text-sm font-medium mb-1">Password</label>
@@ -138,8 +128,6 @@ const Signup: FC = () => {
                 className="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-2 pr-10 text-sm focus:border-[#d28585] focus:outline-none"
               />
 
-              {/* SHOW / HIDE PASSWORD */}
-
               <span
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-2.5 cursor-pointer text-gray-600"
@@ -158,8 +146,6 @@ const Signup: FC = () => {
             </p>
 
           </div>
-
-          {/* BUTTON */}
 
           <button
             type="submit"

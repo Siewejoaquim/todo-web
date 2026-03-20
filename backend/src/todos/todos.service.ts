@@ -12,26 +12,32 @@ export class TodosService {
     private todoModel: Model<Todo>,
   ) {}
 
-  create(createTodoDto: CreateTodoDto, userId: string) {
-    const { title, date, time } = createTodoDto;
-    return this.todoModel.create({ title, date, time, userId, completed: false });
+  create(dto: CreateTodoDto, userId: string) {
+    const { title, date, time, category } = dto;
+    return this.todoModel.create({
+      title, date, time: time ?? '', userId,
+      category: category ?? 'personal',
+      completed: false,
+    });
   }
 
-  findAll(userId: string, type: 'today' | 'scheduled' | 'completed' = 'today') {
+  findAll(userId: string, type: 'today' | 'scheduled' | 'completed' = 'today', category?: string) {
     const now = new Date();
     const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const categoryFilter = category ? { category } : {};
 
     if (type === 'completed') {
-      return this.todoModel.find({ userId, completed: true }).sort({ updatedAt: -1 }).lean();
+      return this.todoModel.find({ userId, completed: true, ...categoryFilter }).sort({ updatedAt: -1 }).lean();
     }
 
     if (type === 'scheduled') {
-      // future date OR same day but future time
+      const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
       return this.todoModel
         .find({
           userId,
           completed: { $ne: true },
+          time: { $nin: [null, ''] },
+          ...categoryFilter,
           $or: [
             { date: { $gt: today } },
             { date: today, time: { $gt: currentTime } },
@@ -41,15 +47,14 @@ export class TodosService {
         .lean();
     }
 
-    // today: same day, time has already passed or is now (past/current tasks)
     return this.todoModel
       .find({
         userId,
         completed: { $ne: true },
-        date: today,
-        time: { $lte: currentTime },
+        $or: [{ time: { $exists: false } }, { time: null }, { time: '' }],
+        ...categoryFilter,
       })
-      .sort({ time: 1 })
+      .sort({ date: 1, createdAt: -1 })
       .lean();
   }
 

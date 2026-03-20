@@ -8,12 +8,10 @@ export class Todo {
   @Prop({ required: true })
   title: string;
 
-  
   @Prop({ required: true })
   date: string;
 
-  
-  @Prop({ required: true })
+  @Prop({ default: '' })
   time: string;
 
   @Prop({ default: false })
@@ -25,8 +23,14 @@ export class Todo {
   @Prop({ default: false })
   reminder15Sent: boolean;
 
+  @Prop({ default: false })
+  startSent: boolean;
+
   @Prop({ required: true })
   userId: string;
+
+  @Prop({ default: 'personal' })
+  category: string;
 }
 
 export const TodoSchema = SchemaFactory.createForClass(Todo);

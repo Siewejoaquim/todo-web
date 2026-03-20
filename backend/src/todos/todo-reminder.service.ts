@@ -22,7 +22,7 @@ export class TodoReminderService {
 
     const todos = await this.todoModel.find({
       completed: { $ne: true },
-      $or: [{ reminder30Sent: false }, { reminder15Sent: false }],
+      $or: [{ reminder30Sent: false }, { reminder15Sent: false }, { startSent: false }],
     }).lean();
 
     if (!todos.length) return;
@@ -47,6 +47,12 @@ export class TodoReminderService {
         await this.mailService.sendReminderEmail(email, todo.title, todo.date, todo.time, 15);
         await this.todoModel.findByIdAndUpdate(todo._id, { reminder15Sent: true });
         this.logger.log(`15-min reminder sent for "${todo.title}"`);
+      }
+
+      if (!todo.startSent && diffMins > -1 && diffMins <= 1) {
+        await this.mailService.sendStartEmail(email, todo.title, todo.date, todo.time);
+        await this.todoModel.findByIdAndUpdate(todo._id, { startSent: true });
+        this.logger.log(`Start email sent for "${todo.title}"`);
       }
     }
   }

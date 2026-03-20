@@ -56,7 +56,6 @@ const Login: React.FC = () => {
         </p>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* EMAIL */}
           <div className="mb-4">
             <label className="block text-sm mb-2">Email</label>
             <input
@@ -73,7 +72,6 @@ const Login: React.FC = () => {
             )}
           </div>
 
-          {/* PASSWORD */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1">Password</label>
             <div className="relative">
@@ -98,7 +96,6 @@ const Login: React.FC = () => {
             )}
           </div>
 
-          {/* REMEMBER & FORGOT */}
           <div className="flex justify-between items-center mb-6 text-sm">
             <label className="flex items-center gap-2">
               <input type="checkbox" />
@@ -109,7 +106,6 @@ const Login: React.FC = () => {
             </a>
           </div>
 
-          {/* SUBMIT BUTTON */}
           <button
             type="submit"
             disabled={isSubmitting}

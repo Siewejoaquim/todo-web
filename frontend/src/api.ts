@@ -3,10 +3,11 @@ import { apiClient } from "./utils";
 export type Todo = {
   id: string;
   title: string;
-  date: string;   // "YYYY-MM-DD"
-  time: string;   // "HH:MM"
+  date: string;
+  time: string;
   completed: boolean;
   createdAt: string;
+  category: string;
 };
 
 type RawTodo = {
@@ -16,21 +17,24 @@ type RawTodo = {
   time: string;
   completed?: boolean;
   createdAt?: string;
+  category?: string;
 };
 
 const mapTodo = (raw: RawTodo): Todo => ({
   id: raw._id,
   title: raw.title,
-
   date: raw.date ? raw.date.slice(0, 10) : "",
   time: raw.time ? raw.time.slice(0, 5) : "00:00",
-  completed: raw.completed === true, 
+  completed: raw.completed === true,
   createdAt: raw.createdAt ?? new Date().toISOString(),
+  category: raw.category ?? "personal",
 });
 
-export const getTodos = async (type: "today" | "scheduled" | "completed" = "today"): Promise<Todo[]> => {
+export const getTodos = async (type: "today" | "scheduled" | "completed" = "today", category?: string): Promise<Todo[]> => {
   try {
-    const res = await apiClient.get<RawTodo[]>(`/todos?type=${type}`);
+    const params = new URLSearchParams({ type });
+    if (category) params.set("category", category);
+    const res = await apiClient.get<RawTodo[]>(`/todos?${params.toString()}`);
     return Array.isArray(res.data) ? res.data.map(mapTodo) : [];
   } catch (error) {
     console.error("Error fetching todos:", error);
@@ -42,6 +46,7 @@ export const createTodo = async (todo: {
   title: string;
   date: string;
   time: string;
+  category?: string;
 }): Promise<Todo | undefined> => {
   try {
     const res = await apiClient.post<RawTodo>("/todos", todo);
@@ -53,7 +58,7 @@ export const createTodo = async (todo: {
 
 export const updateTodo = async (
   id: string,
-  data: { title?: string; date?: string; time?: string; completed?: boolean }
+  data: { title?: string; date?: string; time?: string; completed?: boolean; category?: string }
 ): Promise<Todo | undefined> => {
   try {
     const res = await apiClient.patch<RawTodo>(`/todos/${id}`, data);

@@ -21,8 +21,12 @@ export class TodosController {
   @Get()
   @ApiOperation({ summary: 'Get todos for the logged-in user' })
   @ApiQuery({ name: 'type', enum: ['today', 'scheduled', 'completed'], required: false })
-  findAll(@Req() req, @Query('type') type: 'today' | 'scheduled' | 'completed' = 'today') {
-    return this.todosService.findAll(req.user.userId, type);
+  findAll(
+    @Req() req,
+    @Query('type') type: 'today' | 'scheduled' | 'completed' = 'today',
+    @Query('category') category?: string,
+  ) {
+    return this.todosService.findAll(req.user.userId, type, category);
   }
 
   @Get(':id')

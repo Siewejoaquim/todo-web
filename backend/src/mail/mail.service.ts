@@ -16,8 +16,6 @@ const emailWrapper = (content: string) => `
     <tr>
       <td align="center">
         <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-
-          
           <tr>
             <td style="background-color:#352323;padding:32px 40px;text-align:center;">
               <div style="display:inline-flex;align-items:center;gap:10px;">
@@ -28,15 +26,11 @@ const emailWrapper = (content: string) => `
               </div>
             </td>
           </tr>
-
-          
           <tr>
             <td style="padding:40px 40px 32px;">
               ${content}
             </td>
           </tr>
-
-          
           <tr>
             <td style="background-color:#f9f9f9;border-top:1px solid #eeeeee;padding:24px 40px;text-align:center;">
               <p style="margin:0;font-size:12px;color:#aaaaaa;">
@@ -128,7 +122,6 @@ export class MailService {
         Your task is coming up soon. Don't miss it!
       </p>
 
-      <!-- TASK CARD -->
       <div style="border:1px solid #eeeeee;border-radius:10px;overflow:hidden;margin-bottom:28px;">
         <div style="background-color:#352323;padding:14px 20px;">
           <p style="margin:0;color:#ffffff;font-size:16px;font-weight:bold;">${title}</p>
@@ -172,6 +165,65 @@ export class MailService {
       console.log(`Reminder (${minutesBefore}min) sent to ${to} for: ${title}`);
     } catch (error) {
       console.error('Error sending reminder email:', error);
+    }
+  }
+
+  async sendStartEmail(
+    to: string,
+    title: string,
+    date: string,
+    time: string,
+  ) {
+    const transporter = this.createTransporter();
+    const body = `
+      <h2 style="margin:0 0 8px;color:#352323;font-size:24px;">It's time! 🚀</h2>
+      <p style="margin:0 0 28px;color:#555555;font-size:15px;line-height:1.6;">
+        Your task is starting right now. Time to get it done!
+      </p>
+
+      <div style="border:1px solid #eeeeee;border-radius:10px;overflow:hidden;margin-bottom:28px;">
+        <div style="background-color:#10b981;padding:14px 20px;">
+          <p style="margin:0;color:#ffffff;font-size:16px;font-weight:bold;">${title}</p>
+        </div>
+        <div style="padding:20px;">
+          <table cellpadding="0" cellspacing="0" width="100%">
+            <tr>
+              <td style="padding:8px 0;color:#888888;font-size:13px;width:80px;">📅 Date</td>
+              <td style="padding:8px 0;color:#352323;font-size:14px;font-weight:600;">${date}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;color:#888888;font-size:13px;">🕐 Time</td>
+              <td style="padding:8px 0;color:#352323;font-size:14px;font-weight:600;">${time}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0;color:#888888;font-size:13px;">🟢 Status</td>
+              <td style="padding:8px 0;">
+                <span style="background-color:#10b981;color:#ffffff;font-size:12px;
+                             font-weight:bold;padding:3px 10px;border-radius:20px;">
+                  Starting now
+                </span>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <a href="${BASE_URL}"
+        style="display:inline-block;padding:14px 32px;background-color:#10b981;color:#ffffff;
+               text-decoration:none;border-radius:8px;font-weight:bold;font-size:15px;">
+        Mark as Done →
+      </a>
+    `;
+    try {
+      await transporter.sendMail({
+        from: `"Todo App" <${process.env.EMAIL_USER}>`,
+        to,
+        subject: `🚀 Starting now: "${title}"`,
+        html: emailWrapper(body),
+      });
+      console.log(`Start email sent to ${to} for: ${title}`);
+    } catch (error) {
+      console.error('Error sending start email:', error);
     }
   }
 }
