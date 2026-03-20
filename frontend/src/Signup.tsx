@@ -44,7 +44,7 @@ const Signup: FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#C47623] px-4 py-8">
+    <div className="h-screen overflow-hidden flex items-center justify-center bg-[#C47623] px-4">
       <ToastContainer position="top-right" autoClose={2000} />
 
       <div className="bg-white w-full max-w-sm sm:max-w-md rounded-2xl shadow-lg p-6 sm:p-10">

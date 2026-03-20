@@ -45,7 +45,7 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#C47623] flex items-center justify-center px-4 py-8">
+    <div className="h-screen overflow-hidden bg-[#C47623] flex items-center justify-center px-4">
       <ToastContainer position="top-right" autoClose={2000} />
 
       <div className="bg-white w-full max-w-md rounded-2xl shadow-lg p-6 sm:p-10">

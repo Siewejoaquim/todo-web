@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 
-const BASE_URL = 'https://stalwart-kitten-fc8880.netlify.app/';
+const BASE_URL = 'https://musical-snickerdoodle-bca3b7.netlify.app';
 
 const emailWrapper = (content: string) => `
 <!DOCTYPE html>
