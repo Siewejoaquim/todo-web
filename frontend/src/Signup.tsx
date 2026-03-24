@@ -31,9 +31,13 @@ const Signup: FC = () => {
       toast.success("Account created successfully 🎉");
       reset();
       setTimeout(() => navigate("/login"), 1500);
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Unable to create account ❌");
+      if (error?.response?.status === 409) {
+        toast.error("Email already registered. Please login instead.");
+      } else {
+        toast.error("Unable to create account ❌");
+      }
     }
   };
 

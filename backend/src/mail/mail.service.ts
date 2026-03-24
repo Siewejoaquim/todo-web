@@ -54,13 +54,19 @@ const emailWrapper = (content: string) => `
 @Injectable()
 export class MailService {
   private createTransporter() {
+    const emailPass = process.env.EMAIL_PASS?.replace(/\s/g, '');
+    
     return nodemailer.createTransport({
       host: 'smtp.gmail.com',
-      secure: true,
+      port: 587,
+      secure: false,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        pass: emailPass,
       },
+      tls: {
+        rejectUnauthorized: false
+      }
     });
   }
 

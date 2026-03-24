@@ -41,7 +41,14 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    await this.mailService.sendWelcomeEmail(user.email, user.name);
-    return user.save();
+    const savedUser = await user.save();
+    
+    try {
+      await this.mailService.sendWelcomeEmail(savedUser.email, savedUser.name);
+    } catch (err) {
+      console.error('❌ Failed to send welcome email for user:', savedUser.email, err);
+    }
+    
+    return savedUser;
   }
 }
