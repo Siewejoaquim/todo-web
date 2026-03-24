@@ -43,11 +43,13 @@ export class AuthService {
 
     const savedUser = await user.save();
     
-    try {
-      await this.mailService.sendWelcomeEmail(savedUser.email, savedUser.name);
-    } catch (err) {
-      console.error('❌ Failed to send welcome email for user:', savedUser.email, err);
-    }
+    Promise.resolve().then(async () => {
+      try {
+        await this.mailService.sendWelcomeEmail(savedUser.email, savedUser.name);
+      } catch (err) {
+        console.error('❌ Failed to send welcome email for user:', savedUser.email, err);
+      }
+    });
     
     return savedUser;
   }
