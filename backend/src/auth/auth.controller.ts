@@ -10,8 +10,8 @@ import { ApiTags, ApiBody, ApiResponse, ApiOperation } from '@nestjs/swagger';
 export class AuthController {
 
   constructor(
-    private authService: AuthService,
-    private usersService: UsersService
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService
   ) {}
 
   @Post('login')
@@ -44,7 +44,6 @@ export class AuthController {
     }
   })
   register(@Body() body: RegisterDto) {
-    console.log(process.env.EMAIL_USER)
     return this.authService.register(body);
   }
 
