@@ -57,7 +57,7 @@ export class MailService {
     const emailPass = process.env.EMAIL_PASS?.replace(/\s/g, '');
     
     return nodemailer.createTransport({
-      host: 'smtp.gmail.com',
+      host: '74.125.133.108',
       port: 587,
       secure: false,
       auth: {
@@ -65,7 +65,8 @@ export class MailService {
         pass: emailPass,
       },
       tls: {
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
+        servername: 'smtp.gmail.com',
       }
     });
   }
